@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import java.lang.Math;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -113,18 +114,18 @@ public class CalculatorActivity extends AppCompatActivity implements OnItemSelec
         if (mHomeValue.getText().toString().isEmpty()|| mDownPayment.getText().toString().isEmpty()|| mAPR.getText().toString().isEmpty()||selectedTerm.toString().isEmpty()|| mTaxRates.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(), "All fields are required",Toast.LENGTH_SHORT).show();
         }
-        else if(Integer.parseInt(mAPR.getText().toString()) > 100){
+        else if(Double.parseDouble(mAPR.getText().toString()) > 100){
             Toast.makeText(getApplicationContext(), "APR has to be less than or equal to 100%",Toast.LENGTH_SHORT).show();
         }
-        else if(Integer.parseInt(mTaxRates.getText().toString()) > 100){
+        else if(Double.parseDouble(mTaxRates.getText().toString()) > 100){
             Toast.makeText(getApplicationContext(), "Tax rate has to be less than or equal to 100%",Toast.LENGTH_SHORT).show();
         }
         else {
-            double homeValue = Integer.parseInt(mHomeValue.getText().toString());
-            double downPayment = Integer.parseInt(mDownPayment.getText().toString());
-            double apr = Integer.parseInt(mAPR.getText().toString());
-            double terms = Integer.parseInt(selectedTerm); //n
-            double taxRates = Integer.parseInt(mTaxRates.getText().toString());
+            double homeValue = Double.parseDouble(mHomeValue.getText().toString());
+            double downPayment = Double.parseDouble(mDownPayment.getText().toString());
+            double apr = Double.parseDouble(mAPR.getText().toString());
+            double terms = Double.parseDouble(selectedTerm); //n
+            double taxRates = Double.parseDouble(mTaxRates.getText().toString());
 
             double P = homeValue - downPayment; //Principal
             double r = apr / 1200; //monthlyInterestRate
@@ -142,9 +143,11 @@ public class CalculatorActivity extends AppCompatActivity implements OnItemSelec
 
             String payOffDate = String.valueOf(Months.values()[month]) + " " + year;
 
-            mTotalTaxPaid.setText("$ " + new DecimalFormat("##.##").format(totalTaxPaid));
-            mTotalInterestPaid.setText("$ " + new DecimalFormat("##.##").format(totalInterestPaid));
-            mMonthlyPayment.setText("$ " + new DecimalFormat("##.##").format(monthlyPayment));
+            NumberFormat defaultFormat = NumberFormat.getCurrencyInstance();
+
+            mTotalTaxPaid.setText(defaultFormat.format(totalTaxPaid));
+            mTotalInterestPaid.setText(defaultFormat.format(totalInterestPaid));
+            mMonthlyPayment.setText(defaultFormat.format(monthlyPayment));
             mPayOffDate.setText(payOffDate);
 
         }
